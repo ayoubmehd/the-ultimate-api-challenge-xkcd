@@ -1,0 +1,27 @@
+{
+  "name": "the-ultimate-api-challenge-xkcd",
+  "version": "1.0.0",
+  "description": "---",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "node starter-files/proxy.js",
+    "start": "http-server starter-files/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danascript/the-ultimate-api-challenge-xkcd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danascript/the-ultimate-api-challenge-xkcd/issues"
+  },
+  "homepage": "https://github.com/danascript/the-ultimate-api-challenge-xkcd#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "http-server": "^14.1.1"
+  }
+}
