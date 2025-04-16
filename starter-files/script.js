@@ -49,7 +49,23 @@ class RequestController {
         return this.currentComicId === this.latestComicId;
     }
     isFirst() {
-        return this.currentComicId === 0;
+        return this.currentComicId === 1;
+    }
+
+    async displayById(id) {
+        this.currentComicId = id;
+
+        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        this.display(comic);
+    } 
+
+    async random() {
+        const randomIndex = 1 + Math.floor(Math.random() * this.latestComicId);
+
+        this.currentComicId = randomIndex;
+
+        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        this.display(comic);
     }
 
     async next() {
@@ -62,16 +78,31 @@ class RequestController {
     }
 
     async prev() {
-        if (this.isLatest()) return;
+        if (this.isFirst()) return;
 
         this.currentComicId--;
 
         const comic = await this.request(`/${this.currentComicId}/info.0.json`);
         this.display(comic);
     }
+
+    first() {
+        if (this.isFirst()) return;
+
+        this.displayById(1);
+    }
+
+    last() {
+        if (this.isLatest()) return;
+
+        this.displayById(this.latestComicId);
+    }
 }
 const rc = new RequestController();
 rc.getLatest();
+
+// for debuggin
+// window.rc = rc; 
 
 function prev() {
     rc.prev();
@@ -82,4 +113,21 @@ function next() {
 }
 function random() {
     rc.random();
+}
+function first() {
+    rc.first();
+}
+
+function last() {
+    rc.last();
+}
+
+function handleSubmit(event) {
+    event.preventDefault(); 
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const comicId = formData.get('search-input');
+    
+    rc.displayById(parseInt(comicId));
 }

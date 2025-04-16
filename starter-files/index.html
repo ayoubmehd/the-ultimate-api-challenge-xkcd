@@ -33,13 +33,13 @@
 
             <div class="container">
                 <div>
-                    <button onclick="prev()" id="request-prev" class="btn btn-outline-dark mb-2">&lsaquo; Prev</button>
-                    <button onclick="random" id="request-random" class="btn btn-outline-dark mb-2">Random</button>
-                    <button onclick="next()" id="request-next" class="btn btn-outline-dark mb-2">Next &rsaquo;</button>
+                    <button onclick="prev()" class="btn btn-outline-dark mb-2">&lsaquo; Prev</button>
+                    <button onclick="random()" class="btn btn-outline-dark mb-2">Random</button>
+                    <button onclick="next()" class="btn btn-outline-dark mb-2">Next &rsaquo;</button>
                 </div>
                 <div>
-                    <button id="request-first" class="btn btn-outline-dark mb-2">&laquo; First</button>
-                    <button id="request-last" class="btn btn-outline-dark mb-2">Last &raquo;</button>
+                    <button onclick="first()" class="btn btn-outline-dark mb-2">&laquo; First</button>
+                    <button onclick="last()" class="btn btn-outline-dark mb-2">Last &raquo;</button>
                 </div>
             </div>
 
@@ -51,11 +51,12 @@
 
             <div class="pt-5 mb-4">
                 <h4 class="mb-3">Search Comics by ID</h4>
-                <form id="comic-form" class="form-inline d-flex justify-content-center">
+                <form onsubmit="handleSubmit(event)" class="form-inline d-flex justify-content-center">
                     <div>
                         <input
                             aria-label="find comics by ID"
                             type="number"
+                            name="search-input"
                             id="search-input"
                             class="form-control form-control-sm mr-3"
                             placeholder="Comics number"
