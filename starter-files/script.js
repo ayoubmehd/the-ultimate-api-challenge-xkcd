@@ -28,6 +28,10 @@ class RequestController {
     async request(path) {
         this.loader.classList.remove('d-none');
         this.loader.classList.add('d-flex');
+        this.comicTitle.textContent = "Loading...";
+        this.comicImage.src = "";
+        this.comicImage.alt = "";
+        this.comicDate.textContent = "";
         const comic = await fetch(`http://localhost:3000${path}`).then(res => res.json());
         this.loader.classList.add('d-none');
         this.loader.classList.remove('d-flex');
