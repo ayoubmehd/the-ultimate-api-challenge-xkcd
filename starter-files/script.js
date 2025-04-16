@@ -16,6 +16,7 @@ class RequestController {
         this.comicTitle = document.querySelector('#comic-title');
         this.comicImage = document.querySelector('#comic-image');
         this.comicDate = document.querySelector('#comic-date');
+        this.error = document.querySelector("#error");
     }
 
     display(comic) {
@@ -26,20 +27,33 @@ class RequestController {
     }
 
     async request(path) {
-        this.loader.classList.remove('d-none');
-        this.loader.classList.add('d-flex');
-        this.comicTitle.textContent = "Loading...";
-        this.comicImage.src = "";
-        this.comicImage.alt = "";
-        this.comicDate.textContent = "";
-        const comic = await fetch(`http://localhost:3000${path}`).then(res => res.json());
-        this.loader.classList.add('d-none');
-        this.loader.classList.remove('d-flex');
-        return comic;
+        try {
+            this.error.textContent = "";
+            this.loader.classList.remove('d-none');
+            this.loader.classList.add('d-flex');
+            this.comicTitle.textContent = 'Loading...';
+            this.comicImage.src = '';
+            this.comicImage.alt = '';
+            this.comicDate.textContent = '';
+            const response = await fetch(`http://localhost:3000${path}`);
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const comic = await response.json();
+            this.loader.classList.add('d-none');
+            this.loader.classList.remove('d-flex');
+            return [null, comic];
+        } catch (error) {
+            this.comicTitle.textContent = '';
+            this.loader.classList.add('d-none');
+            this.loader.classList.remove('d-flex');
+            return [error, null];
+        }
     }
 
     async getLatest() {
-        const comic = await this.request('/info.0.json');
+        const [, comic] = await this.request('/info.0.json');
+        
         this.display(comic);
         if (!this.latestComicId) {
             this.latestComicId = comic.num;
@@ -59,7 +73,11 @@ class RequestController {
     async displayById(id) {
         this.currentComicId = id;
 
-        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        const [error, comic] = await this.request(`/${this.currentComicId}/info.0.json`);
+        if (error && typeof error === "object" && "message" in error) {
+            this.error.textContent = error.message
+            return;
+        }
         this.display(comic);
     } 
 
@@ -68,7 +86,7 @@ class RequestController {
 
         this.currentComicId = randomIndex;
 
-        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        const [, comic] = await this.request(`/${this.currentComicId}/info.0.json`);
         this.display(comic);
     }
 
@@ -77,7 +95,7 @@ class RequestController {
 
         this.currentComicId++;
 
-        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        const [, comic] = await this.request(`/${this.currentComicId}/info.0.json`);
         this.display(comic);
     }
 
@@ -86,7 +104,7 @@ class RequestController {
 
         this.currentComicId--;
 
-        const comic = await this.request(`/${this.currentComicId}/info.0.json`);
+        const [, comic] = await this.request(`/${this.currentComicId}/info.0.json`);
         this.display(comic);
     }
 
